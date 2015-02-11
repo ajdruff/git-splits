@@ -100,7 +100,7 @@ The script can be placed in any location that is in your path, but its recommend
 Credits
 -------
 
-The script was inspired by the a [Stackoverflow post](http://stackoverflow.com/a/6006679/3306354)  by [jkeating](http://stackoverflow.com/users/691627/jkeating)
+The script was inspired by  a [Stackoverflow post](http://stackoverflow.com/a/6006679/3306354)  by [jkeating](http://stackoverflow.com/users/691627/jkeating)
 
 AUTHOR
 ------
