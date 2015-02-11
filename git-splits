@@ -1,0 +1,105 @@
+#!/bin/bash
+
+######################################
+# Git Split
+# 
+#
+# Installation : 
+# Add this to the same directory that your git executable is in, and make sure it has executable
+# permissions : i.e.: chmod o+x git-splits
+#
+# Splits A Repo's directory into a separate branch
+# retaining the directory's history, and removing 
+# the rest. Because it uses filter-branch, the original branch will be
+# written to .git/refs/original as a backup. If you run this command twice on the same
+# branch, you'll need to use -f which will remove the backup before running it again.
+#
+# Usage:
+# First, checkout the branch you want to split. 
+# git splits -b mynewbranch dir1 dir2 dir3
+#
+# run it again on same branch: 
+# git splits -f -b mynewbranch2 dir1 dir2 dir3
+# -f deletes .git/refs/original . required for subsequent uses on ssame branch
+# -b <branch name> The branch name that the directories will be extracted into
+# 
+
+#
+# @author <andrew@nomostock.com>
+# original idea/credit: jkeating/http://stackoverflow.com/a/6006679/3306354
+######################################
+
+
+#####################
+#
+# GetOpts
+# http://stackoverflow.com/a/16496491/3306354
+#####################
+usage() { echo "Usage: git splits [-f] -b <branch_name> <dir1> <dir2>" 1>&2; exit 1; }
+
+while getopts "fb:" o; do
+    case "${o}" in
+        f)
+            echo 'removing backup refs/orginal';
+			rm -rf .git/refs/original;
+			rm -rf .git-rewrite;
+			
+            ;;		
+        b)
+            branch_name=${OPTARG}
+            ;;
+		
+        *)
+            usage
+            ;;
+    esac
+done
+shift $((OPTIND-1))
+
+if [ -z "${branch_name}" ]; then
+    usage
+fi
+
+
+for var in "$@"
+do
+
+	dirs="| grep -z -v \"^$var\" \
+	$dirs"
+
+done
+
+#remove .git-rewrite if it already exists.
+rm -rf .git-rewrite;
+git branch  "${branch_name}";
+
+git filter-branch \
+    --prune-empty \
+    --index-filter '
+        git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
+         '"${dirs}"' \
+        | xargs -0 -r git rm --cached -r
+    ' \
+    -- \
+    "${branch_name}";
+	
+	echo "New branch successfully created at ${branch_name}";
+git branch;
+exit;
+
+#########################
+#
+# Example
+#
+#########################
+# 
+git filter-branch \
+    --prune-empty \
+    --index-filter '
+        git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
+        | grep -z -v "^config" \
+        | grep -z -v "^public_html" \
+        | xargs -0 -r git rm --cached -r
+    ' \
+    -- \
+    "${branch_name}"
