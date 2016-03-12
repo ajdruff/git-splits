@@ -64,7 +64,7 @@ fi
 for var in "$@"
 do
 
-	dirs="| grep -z -v \"^$var\" \
+	dirs="| grep -a -z -v \"^$var\" \
 	$dirs"
 
 done
