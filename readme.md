@@ -1,18 +1,18 @@
-#git-splits
+# git-splits
 
 
-##NAME
+## NAME
 
 git-splits - Extracts directories into a new branch with re-written history containing only those directories.
 
 
-##SYNOPSIS
+## SYNOPSIS
 
 `git splits  -b <branch> <directories>...`
 
 `git splits  -f -b <branch> <directories>...>`
 
-##OPTIONS
+## OPTIONS
 
 -b `<branch>`::
    The name of the new branch to be created.
@@ -24,7 +24,7 @@ git-splits - Extracts directories into a new branch with re-written history cont
   Directory paths (or prefixes) within the current repo, separated by a space, that you want added into the new branch.
 
 
-##DESCRIPTION
+## DESCRIPTION
 
 git-splits is a git extension that extracts multiple directories of a git repo into a new branch, allowing you to optionally push the new branch to a standalone repo.
 
@@ -35,7 +35,7 @@ This command is a wrapper around `git filter-branch` and as such, all behavior a
 Note that this operation is very I/O expensive. If your repository is large, it might be a good idea to modify the code for your situation. See the git filter-branch documentation for details on using the `-d` option. 
 
 
-##Installation
+## Installation
 
 
 `git splits` is an unofficial git extension that can be easily added to your git installation by adding the script to a directory within your shell's path.
@@ -65,18 +65,18 @@ This will download a copy to the same directory that the git binary is located i
 
 
 
->Note there is no dash `-` between 'git' and 'splits'.
+> Note there is no dash `-` between 'git' and 'splits'.
 
-##Be Safe
+## Be Safe
 
 ***Please take the time to make a complete backup of both the remote and local repositories and associated working directories prior to using `git splits`.
 Its also recommended that you operate on a clone of your local repo.***
 
 Since `git splits` is simply a wrapper around the built-in `git filter-branch` extension, using it carries the same risk as using `git filter-branch` directly. As always, when working with git, results may work as designed, but not as expected. It is for these reasons that it is strongly advised that you first make a complete backup of both the remote and local repositories and associated working directories prior to using `git splits`.
 
-##Examples
+## Examples
 
-###EXAMPLE 1. Split multiple directories into a new branch (first use)
+### EXAMPLE 1. Split multiple directories into a new branch (first use)
 
 You have a local repository called 'dev' that looks like this : 
 
@@ -103,7 +103,7 @@ When finished you'll have (2) branches, dev and MyWebsite. MyWebsite will contai
 
 
 
-###EXAMPLE 2. Repeating a git splits operation on the same repo
+### EXAMPLE 2. Repeating a git splits operation on the same repo
 
 Because git filter-branch retains a backup of the branch that was re-written, it will throw an error when you run a new operation such as this on the same directory twice in a row: 
 
@@ -123,7 +123,7 @@ To enable the operation to proceed, you must delete the backup by using the -f f
 
 Note that because git splits rewrites the history for only the new branch that is created, the backup is extraneous.  All the same, it is cautioned to make a complete backup of both your origin and your local repositories before using `git splits`.
 
-###EXAMPLE 3. Split directories into a new repository
+### EXAMPLE 3. Split directories into a new repository
 
 This example is exactly like Example 1 except that we go one step further and make the new branch into its own repo.
 
@@ -158,12 +158,12 @@ Done.
 
 
 
-##Credits
+## Credits
 
 
 core filter-branch code taken from  a [Stackoverflow post](http://stackoverflow.com/a/6006679/3306354)  by [jkeating](http://stackoverflow.com/users/691627/jkeating)
 
-##AUTHOR
+## AUTHOR
 
 Written by Andrew Druffner <andrew@nomstock.com>
 
