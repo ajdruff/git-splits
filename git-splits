@@ -2,27 +2,27 @@
 
 ######################################
 # Git Split
-# 
 #
-# Installation : 
+#
+# Installation :
 # Add this to the same directory that your git executable is in, and make sure it has executable
 # permissions : i.e.: chmod o+x git-splits
 #
 # Splits A Repo's directory into a separate branch
-# retaining the directory's history, and removing 
+# retaining the directory's history, and removing
 # the rest. Because it uses filter-branch, the original branch will be
 # written to .git/refs/original as a backup. If you run this command twice on the same
 # branch, you'll need to use -f which will remove the backup before running it again.
 #
 # Usage:
-# First, checkout the branch you want to split. 
+# First, checkout the branch you want to split.
 # git splits -b mynewbranch dir1 dir2 dir3
 #
-# run it again on same branch: 
+# run it again on same branch:
 # git splits -f -b mynewbranch2 dir1 dir2 dir3
 # -f deletes .git/refs/original . required for subsequent uses on ssame branch
 # -b <branch name> The branch name that the directories will be extracted into
-# 
+#
 
 #
 # @author <andrew@nomostock.com>
@@ -41,14 +41,14 @@ while getopts "fb:" o; do
     case "${o}" in
         f)
             echo 'removing backup refs/orginal';
-			rm -rf .git/refs/original;
-			rm -rf .git-rewrite;
-			
-            ;;		
+            rm -rf .git/refs/original;
+            rm -rf .git-rewrite;
+
+            ;;
         b)
             branch_name=${OPTARG}
             ;;
-		
+
         *)
             usage
             ;;
@@ -64,8 +64,8 @@ fi
 for var in "$@"
 do
 
-	dirs="| grep -z -v \"^$var\" \
-	$dirs"
+    dirs="| grep -z -v \"^$var\" \
+    $dirs"
 
 done
 
@@ -82,8 +82,8 @@ git filter-branch \
     ' \
     -- \
     "${branch_name}";
-	
-	echo "New branch successfully created at ${branch_name}";
+
+    echo "New branch successfully created at ${branch_name}";
 git branch;
 exit;
 
@@ -92,7 +92,7 @@ exit;
 # Example
 #
 #########################
-# 
+#
 git filter-branch \
     --prune-empty \
     --index-filter '
