@@ -59,7 +59,7 @@ esac
 #####################
 #
 # GetOpts
-# http://stackoverflow.com/a/16496491/3306354
+# http://stackoverflow.com/a/16496491
 #####################
 usage() { echo "Usage: git splits [-f] -b <branch_name> <dir1> <dir2>" 1>&2; exit 1; }
 
