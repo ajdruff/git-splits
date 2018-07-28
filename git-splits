@@ -32,6 +32,32 @@
 
 #####################
 #
+# Determine platform
+# http://stackoverflow.com/a/18434831
+#####################
+
+# NOTE: on macOS, this requires GNU findutils,
+# installed using e.g. brew install findutils:
+# https://brew.sh/
+# https://apple.stackexchange.com/a/69332
+case "${OSTYPE}" in
+    darwin*)
+        grep='ggrep'
+        xargs='gxargs'
+        ;;
+    linux-*)
+        grep='grep'
+        xargs='xargs'
+        ;;
+    *)
+        echo 'ERROR'
+        echo "unsupported operating system: ${OSTYPE}"
+        exit 1
+        ;;
+esac
+
+#####################
+#
 # GetOpts
 # http://stackoverflow.com/a/16496491/3306354
 #####################
@@ -64,7 +90,7 @@ fi
 for var in "$@"
 do
 
-    dirs="| grep -z -v \"^$var\" \
+    dirs="| \"${grep}\" -z -v \"^$var\" \
     $dirs"
 
 done
@@ -78,7 +104,7 @@ git filter-branch \
     --index-filter '
         git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
          '"${dirs}"' \
-        | xargs -0 -r git rm --cached -r
+        | '"${xargs}"' -0 -r git rm --cached -r
     ' \
     -- \
     "${branch_name}";
@@ -97,9 +123,9 @@ git filter-branch \
     --prune-empty \
     --index-filter '
         git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
-        | grep -z -v "^config" \
-        | grep -z -v "^public_html" \
-        | xargs -0 -r git rm --cached -r
+        | '"${grep}"' -z -v "^config" \
+        | '"${grep}"' -z -v "^public_html" \
+        | '"${xargs}"' -0 -r git rm --cached -r
     ' \
     -- \
     "${branch_name}"
