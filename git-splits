@@ -84,7 +84,7 @@ git filter-branch \
     "${branch_name}";
 	
 	echo "New branch successfully created at ${branch_name}";
-git branch;
+git branch --contains;
 exit;
 
 #########################
