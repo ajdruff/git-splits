@@ -125,16 +125,27 @@ Now create a new empty repo either locally or on a remote server. For this examp
 
 After the successful split, and after you created the remote empty repo, run the following commands within the local repo you ran `git splits` on:
 
-    #add a new remote origin for the empty repo so we can push to the empty repo
+add a new remote origin for the empty repo so we can push to the empty repo
+
     git remote add origin_my_website git@github.com:simpliwp/repo_my_website.git
-    #push the branch to the empty repo's master branch
+
+push the branch to the empty repo's master branch
+
     git push origin_my_website branch_my_website:master
-    #Now change current directory out of the old repo
+
+Now change current directory out of the old repo
+
     cd /path/to/where/you/want/the/new/local/repo
-    #clone the remote repo you just pushed to 
+
+clone the remote repo you just pushed to 
+
     git clone  git@github.com:simpliwp/repo_my_website.git
 
 Done.
+
+## License
+
+[MIT License](https://github.com/ajdruff/git-splits/blob/master/LICENSE)
 
 ## Credits
 
