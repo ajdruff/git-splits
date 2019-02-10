@@ -36,7 +36,7 @@ Note that this operation is very I/O expensive. If your repository is large, it 
 
 Execute the following one-liner from a bash shell on your local machine.
 
-    wget -o $(dirname $(which git))/git-splits https://github.com/simpliwp/git-splits/blob/master/git-splits && chmod o+x $(dirname $(which git))/git-splits;
+    sudo wget -o $(dirname $(which git))/git-splits https://raw.githubusercontent.com/ajdruff/git-splits/master/git-splits;sudo chmod a+x $(dirname $(which git))/git-splits;
 
 This will download a copy to the same directory that the git binary is located in, and set the executable bit for the owner.
 
@@ -46,7 +46,7 @@ This will download a copy to the same directory that the git binary is located i
 
         cp git-splits $(dirname $(which git))/
 
-3. Once the script is in place, you can call it via git (don't call it directly.
+2. Once the script is in place, you can call it via git (don't call it directly.
 
         git splits
 
