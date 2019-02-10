@@ -1,28 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ######################################
 # Git Split
-# 
 #
-# Installation : 
+#
+# Installation :
 # Add this to the same directory that your git executable is in, and make sure it has executable
 # permissions : i.e.: chmod o+x git-splits
 #
 # Splits A Repo's directory into a separate branch
-# retaining the directory's history, and removing 
+# retaining the directory's history, and removing
 # the rest. Because it uses filter-branch, the original branch will be
 # written to .git/refs/original as a backup. If you run this command twice on the same
 # branch, you'll need to use -f which will remove the backup before running it again.
 #
 # Usage:
-# First, checkout the branch you want to split. 
+# First, checkout the branch you want to split.
 # git splits -b mynewbranch dir1 dir2 dir3
 #
-# run it again on same branch: 
+# run it again on same branch:
 # git splits -f -b mynewbranch2 dir1 dir2 dir3
 # -f deletes .git/refs/original . required for subsequent uses on ssame branch
 # -b <branch name> The branch name that the directories will be extracted into
-# 
+#
 
 #
 # @author <andrew@nomostock.com>
@@ -32,8 +32,34 @@
 
 #####################
 #
+# Determine platform
+# http://stackoverflow.com/a/18434831
+#####################
+
+# NOTE: on macOS, this requires GNU findutils,
+# installed using e.g. brew install findutils:
+# https://brew.sh/
+# https://apple.stackexchange.com/a/69332
+case "${OSTYPE}" in
+    darwin*)
+        grep='ggrep'
+        xargs='gxargs'
+        ;;
+    linux-*)
+        grep='grep'
+        xargs='xargs'
+        ;;
+    *)
+        echo 'ERROR'
+        echo "unsupported operating system: ${OSTYPE}"
+        exit 1
+        ;;
+esac
+
+#####################
+#
 # GetOpts
-# http://stackoverflow.com/a/16496491/3306354
+# http://stackoverflow.com/a/16496491
 #####################
 usage() { echo "Usage: git splits [-f] -b <branch_name> <dir1> <dir2>" 1>&2; exit 1; }
 
@@ -41,14 +67,14 @@ while getopts "fb:" o; do
     case "${o}" in
         f)
             echo 'removing backup refs/orginal';
-			rm -rf .git/refs/original;
-			rm -rf .git-rewrite;
-			
-            ;;		
+            rm -rf .git/refs/original;
+            rm -rf .git-rewrite;
+
+            ;;
         b)
             branch_name=${OPTARG}
             ;;
-		
+
         *)
             usage
             ;;
@@ -64,8 +90,8 @@ fi
 for var in "$@"
 do
 
-	dirs="| grep -z -v \"^$var\" \
-	$dirs"
+    dirs="| \"${grep}\" -z -v \"^$var\" \
+    $dirs"
 
 done
 
@@ -78,12 +104,12 @@ git filter-branch \
     --index-filter '
         git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
          '"${dirs}"' \
-        | xargs -0 -r git rm --cached -r
+        | '"${xargs}"' -0 -r git rm --cached -r
     ' \
     -- \
     "${branch_name}";
-	
-	echo "New branch successfully created at ${branch_name}";
+
+    echo "New branch successfully created at ${branch_name}";
 git branch;
 exit;
 
@@ -92,14 +118,14 @@ exit;
 # Example
 #
 #########################
-# 
+#
 git filter-branch \
     --prune-empty \
     --index-filter '
         git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
-        | grep -z -v "^config" \
-        | grep -z -v "^public_html" \
-        | xargs -0 -r git rm --cached -r
+        | '"${grep}"' -z -v "^config" \
+        | '"${grep}"' -z -v "^public_html" \
+        | '"${xargs}"' -0 -r git rm --cached -r
     ' \
     -- \
     "${branch_name}"
