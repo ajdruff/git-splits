@@ -4,19 +4,29 @@
 
 git-splits - Extracts directories into a new branch with re-written history containing only those directories.
 
-## SYNOPSIS
+## Quick Start
 
-`git splits  -b <branch> <directories>...`
+change into the directory containing your repo
 
-`git splits  -f -b <branch> <directories>...>`
+    cd myrepo
 
-## OPTIONS
+Create new branch `branch_name` with only the listed directories
 
-`-b <branch>`:
-    The name of the new branch to be created.
+    git splits -b branch_name dir1 dir2
 
-`-f`:
-    Deletes backups at `.git/refs/original`, allowing a consecutive `git splits` operation to be run.
+When running a second time on the same repo, you'll need to use `-f` option
+
+    git splits -f -b branch_name dir1 dir2
+
+## Usage
+
+    Usage: git splits [option...] -b branch_name dir_name [dir_name…]
+
+    -b          new branch name
+    -f          force, use if you get 'create a new backup' error
+    -t          forces grep to process all files as text, instead of as a binary type which is the default. use this option if you get binary file match errors
+
+> by default, git-splits will make a backup to .git/refs/original. when running git splits more than once on the same repo, you'll get a message that this backup exists and it will refuse to run. To force it to execute, use the `-f` option which will delete the backup and create the new branch
 
 ## DESCRIPTION
 
