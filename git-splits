@@ -61,16 +61,40 @@ esac
 # GetOpts
 # http://stackoverflow.com/a/16496491
 #####################
-usage() { echo "Usage: git splits [-f] -b <branch_name> <dir1> <dir2>" 1>&2; exit 1; }
+#usage() { echo "Usage: git splits [-f] [-t] -b <branch_name> <dir1> <dir2>" 1>&2; #exit 1; }
 
-while getopts "fb:" o; do
+#########################
+# The command line help #
+#########################
+usage() {
+    echo "Usage: git splits [option...] -b branch_name dir_name [dir_name…]"
+    echo
+    echo "   -b          new branch name"
+    echo "   -f          force, use if you get 'create a new backup' error"
+    echo "   -t          forces grep to process all files as text, instead of as a binary type which is the default. use this option if you get binary file match errors"
+    echo
+    # echo some stuff here for the -a or --add-options 
+    1>&2;exit 1
+}
+
+
+# intialization
+
+binary_files_type=binary
+gs_messages=
+
+while getopts "ftb:" o; do
     case "${o}" in
         f)
-            echo 'removing backup refs/orginal';
+            gs_messages+='removed backup refs/orginal \n';
             rm -rf .git/refs/original;
             rm -rf .git-rewrite;
 
             ;;
+        t)
+            gs_messages+='used t flag, processed binary files as text \n';
+            binary_files_type=text
+            ;;            
         b)
             branch_name=${OPTARG}
             ;;
@@ -90,7 +114,7 @@ fi
 for var in "$@"
 do
 
-    dirs="| \"${grep}\" -z -v \"^$var\" \
+    dirs="| \"${grep}\" --binary-files=\"${binary_files_type}\" -z -v \"^$var\" \
     $dirs"
 
 done
@@ -104,18 +128,20 @@ git filter-branch \
     --index-filter '
         git ls-tree -z -r --name-only --full-tree $GIT_COMMIT \
          '"${dirs}"' \
-        | '"${xargs}"' -0 -r git rm --cached -r
+       | '"${xargs}"' -0 -r git rm --cached -r
     ' \
     -- \
     "${branch_name}";
 
-    echo "New branch successfully created at ${branch_name}";
+    echo "New branch created at ${branch_name}";
+    echo -e "${gs_messages}";
+    
 git branch;
 exit;
 
 #########################
 #
-# Example
+# Using git filter-branch instead of git splits
 #
 #########################
 #
