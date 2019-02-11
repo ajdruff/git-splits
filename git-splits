@@ -136,7 +136,7 @@ git filter-branch \
     echo "New branch created at ${branch_name}";
     echo -e "${gs_messages}";
     
-git branch;
+git branch --list ${branch_name};
 exit;
 
 #########################
