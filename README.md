@@ -44,7 +44,7 @@ Note that this operation is very I/O expensive. If your repository is large, it 
 
 ### Prerequirements
 
-On OSX, `git splits` requires GNU `findutils`, installed using `brew install findutils`.  Otherwise, Mac users will see the error "ggrep: command not found".
+On OSX, `git splits` requires GNU `findutils`, installed using `brew install findutils grep`.  Otherwise, Mac users will see the error "ggrep: command not found".
 
 ### To install using wget
 
