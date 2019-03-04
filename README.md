@@ -42,7 +42,7 @@ Note that this operation is very I/O expensive. If your repository is large, it 
 
 `git splits` is an unofficial git extension that can be easily added to your git installation by adding the script to a directory within your shell's path.
 
-### Prerequirements
+### REQUIREMENTS
 
 On OSX, `git splits` requires GNU tools (including `gxargs` and `ggrep`), which can be installed using `brew install findutils grep`.  Otherwise, Mac users will see the error "ggrep: command not found".
 
