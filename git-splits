@@ -49,6 +49,10 @@ case "${OSTYPE}" in
         grep='grep'
         xargs='xargs'
         ;;
+    msys)
+        grep='grep'
+        xargs='xargs'
+        ;;
     *)
         echo 'ERROR'
         echo "unsupported operating system: ${OSTYPE}"
